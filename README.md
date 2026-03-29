@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/typescript-5-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![License](https://img.shields.io/badge/license-private-red)](/)
 
-**Desktop client for [LewSteamMan](https://github.com/Lewonte/LewSteamMan) — manage Steam accounts from your taskbar.**
+**Desktop client for [LewSteamMan](https://github.com/Lewonte/LewSteamMan) — manage your Steam authenticators from the taskbar.**
 
 </div>
 
@@ -144,5 +144,5 @@ src/
 ---
 
 <div align="center">
-<sub>Private use only. Desktop client for <a href="https://github.com/Lewonte/LewSteamMan">LewSteamMan</a>.</sub>
+<sub>Desktop client for <a href="https://github.com/Lewonte/LewSteamMan">LewSteamMan</a>.</sub>
 </div>
