@@ -50,7 +50,9 @@ export function CredentialsModal({ steamId, onClose }: Props) {
                 <CopyButton onClick={() => copyField(data.password, 'Password')} />
               </div>
             </div>
-            <CredField label="Guard Code" value={data.guard_code} onCopy={copyField} />
+            {data.guard_code && (
+              <CredField label="Guard Code" value={data.guard_code} onCopy={copyField} />
+            )}
           </div>
         ) : (
           <p className="text-sm text-red-400">Failed to load</p>

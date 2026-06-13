@@ -4,8 +4,10 @@ export type {
   ApproveLoginResponse,
   ConfigResponse,
   ConnectionTestResult,
+  CreateAccountRequest,
   CredentialsResponse,
-  TwoFactorCodeResponse
+  TwoFactorCodeResponse,
+  UpdateAccountRequest
 }
 
 // These are declared globally in preload/index.d.ts
@@ -17,3 +19,5 @@ type CredentialsResponse = globalThis.CredentialsResponse
 type ApproveLoginResponse = globalThis.ApproveLoginResponse
 type ConfigResponse = globalThis.ConfigResponse
 type ConnectionTestResult = globalThis.ConnectionTestResult
+type CreateAccountRequest = globalThis.CreateAccountRequest
+type UpdateAccountRequest = globalThis.UpdateAccountRequest

@@ -46,16 +46,42 @@ export function registerIpcHandlers(): void {
   // Accounts
   ipcMain.handle('get-accounts', () => apiFetch('/accounts'))
 
+  ipcMain.handle('create-account', (_e, account) =>
+    apiFetch('/accounts', {
+      method: 'POST',
+      body: JSON.stringify(account)
+    })
+  )
+
+  ipcMain.handle('update-account', (_e, steamId: string, account) =>
+    apiFetch(`/accounts/${encodeURIComponent(steamId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify(account)
+    })
+  )
+
+  ipcMain.handle('sync-marvel-account', (_e, steamId: string) =>
+    apiFetch(`/accounts/${encodeURIComponent(steamId)}/marvel/sync`, {
+      method: 'POST'
+    })
+  )
+
+  ipcMain.handle('request-marvel-update', (_e, steamId: string) =>
+    apiFetch(`/accounts/${encodeURIComponent(steamId)}/marvel/request-update`, {
+      method: 'POST'
+    })
+  )
+
   ipcMain.handle('get-code', (_e, steamId: string) =>
-    apiFetch(`/accounts/${steamId}/code`)
+    apiFetch(`/accounts/${encodeURIComponent(steamId)}/code`)
   )
 
   ipcMain.handle('get-credentials', (_e, steamId: string) =>
-    apiFetch(`/accounts/${steamId}/credentials`)
+    apiFetch(`/accounts/${encodeURIComponent(steamId)}/credentials`)
   )
 
   ipcMain.handle('approve-login', (_e, steamId: string, challengeUrl: string) =>
-    apiFetch(`/accounts/${steamId}/approve-login`, {
+    apiFetch(`/accounts/${encodeURIComponent(steamId)}/approve-login`, {
       method: 'POST',
       body: JSON.stringify({ challenge_url: challengeUrl })
     })
