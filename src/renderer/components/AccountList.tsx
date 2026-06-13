@@ -74,6 +74,9 @@ export function AccountList() {
             level={account.level}
             characterName={account.character_name}
             nameplateUrl={account.nameplate_url}
+            rankedWins={account.ranked_wins}
+            rankedLosses={account.ranked_losses}
+            seasonWins={account.season_wins}
             lastMarvelSyncAt={account.last_marvel_sync_at}
             lastMarvelUpdateRequestedAt={account.last_marvel_update_requested_at}
             note={account.note}

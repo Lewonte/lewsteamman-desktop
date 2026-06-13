@@ -25,6 +25,9 @@ interface Props {
   level: string | null
   characterName: string | null
   nameplateUrl: string | null
+  rankedWins: number | null
+  rankedLosses: number | null
+  seasonWins: number | null
   lastMarvelSyncAt: number | null
   lastMarvelUpdateRequestedAt: number | null
   note: string | null
@@ -42,6 +45,9 @@ export function AccountCard({
   level,
   characterName,
   nameplateUrl,
+  rankedWins,
+  rankedLosses,
+  seasonWins,
   lastMarvelSyncAt,
   lastMarvelUpdateRequestedAt,
   note,
@@ -60,6 +66,13 @@ export function AccountCard({
     ? Math.max(0, 30 * 60 - (Math.floor(Date.now() / 1000) - lastMarvelUpdateRequestedAt))
     : 0
   const updateLocked = updateCooldownSeconds > 0
+  const hasRankedStats = rankedWins !== null && rankedLosses !== null
+  const rankedTotal = (rankedWins ?? 0) + (rankedLosses ?? 0)
+  const rankedWinRate =
+    hasRankedStats && rankedTotal > 0
+      ? Math.round(((rankedWins ?? 0) / rankedTotal) * 100)
+      : null
+  const hasStats = hasRankedStats || seasonWins !== null
 
   const handleCopyCode = () => {
     if (code) {
@@ -174,7 +187,7 @@ export function AccountCard({
             </div>
           </div>
 
-          {(gameUsername || uid || rank || level || note) && (
+          {(gameUsername || uid || rank || level || note || hasStats) && (
             <div className="space-y-2 text-xs">
               {(gameUsername || uid || rank || level) && (
                 <div className="flex flex-wrap gap-2">
@@ -196,6 +209,23 @@ export function AccountCard({
                   {uid && (
                     <span className="rounded bg-slate-950/70 px-2 py-1 text-slate-300">
                       UID {uid}
+                    </span>
+                  )}
+                </div>
+              )}
+              {hasStats && (
+                <div className="flex flex-wrap gap-2">
+                  {hasRankedStats && (
+                    <span className="rounded bg-slate-950/70 px-2 py-1 text-slate-100">
+                      Ranked {rankedWins}W / {rankedLosses}L
+                      {rankedWinRate !== null && (
+                        <span className="text-slate-400"> · {rankedWinRate}%</span>
+                      )}
+                    </span>
+                  )}
+                  {seasonWins !== null && (
+                    <span className="rounded bg-emerald-950/70 px-2 py-1 text-emerald-100">
+                      Season {seasonWins}W
                     </span>
                   )}
                 </div>

@@ -19,6 +19,9 @@ interface AccountResponse {
   level: string | null
   character_name: string | null
   nameplate_url: string | null
+  ranked_wins: number | null
+  ranked_losses: number | null
+  season_wins: number | null
   last_marvel_sync_at: number | null
   last_marvel_update_requested_at: number | null
   note: string | null
