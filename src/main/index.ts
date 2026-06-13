@@ -27,12 +27,18 @@ function createWindow(): void {
     mainWindow?.show()
   })
 
-  // Minimize to tray instead of closing
+  // Minimize to tray instead of closing — but only in the packaged app.
+  // In dev, closing the window should fully quit so the Electron process
+  // doesn't linger in the background after the dev server stops.
   mainWindow.on('close', (e) => {
-    if (!app.isQuitting) {
+    if (!app.isQuitting && app.isPackaged) {
       e.preventDefault()
       mainWindow?.hide()
     }
+  })
+
+  mainWindow.on('closed', () => {
+    mainWindow = null
   })
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -55,7 +61,7 @@ function createTray(): void {
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Show LewSteamMan',
-      click: () => mainWindow?.show()
+      click: () => showWindow()
     },
     { type: 'separator' },
     {
@@ -69,7 +75,15 @@ function createTray(): void {
 
   tray.setToolTip('LewSteamMan')
   tray.setContextMenu(contextMenu)
-  tray.on('double-click', () => mainWindow?.show())
+  tray.on('double-click', () => showWindow())
+}
+
+function showWindow(): void {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.show()
+  } else {
+    createWindow()
+  }
 }
 
 // Extend App type for isQuitting flag
@@ -91,8 +105,30 @@ app.whenReady().then(() => {
   })
 })
 
+// Any quit path (Cmd/Ctrl+Q, OS shutdown, dev server stop) must flip this
+// flag so the window's close handler stops trapping the close into the tray.
+app.on('before-quit', () => {
+  app.isQuitting = true
+})
+
+app.on('will-quit', () => {
+  tray?.destroy()
+  tray = null
+})
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
+
+// In dev, make sure terminating the dev server actually exits Electron
+// instead of leaving an orphaned process behind.
+if (!app.isPackaged) {
+  const quit = (): void => {
+    app.isQuitting = true
+    app.quit()
+  }
+  process.on('SIGINT', quit)
+  process.on('SIGTERM', quit)
+}
