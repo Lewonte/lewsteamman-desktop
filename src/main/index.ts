@@ -9,8 +9,9 @@ function createWindow(): void {
   mainWindow = new BrowserWindow({
     width: 480,
     height: 680,
-    minWidth: 400,
-    minHeight: 500,
+    resizable: false,
+    maximizable: false,
+    fullscreenable: false,
     title: 'LewSteamMan',
     backgroundColor: '#0f172a',
     show: false,

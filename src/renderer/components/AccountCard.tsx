@@ -8,6 +8,13 @@ import { EditAccountDialog } from './EditAccountDialog'
 import { QRApprovalDialog } from './QRApprovalDialog'
 import { toast } from 'sonner'
 
+const DEFAULT_NAMEPLATE_URL =
+  'https://rivalskins.com/wp-content/uploads/marvel-assets/items/nameplate/universal/img_rivals.webp'
+
+function marvelErrorMessage(err: unknown): string {
+  return `${String(err)} — make sure the Marvel Rivals profile is public, not hidden.`
+}
+
 interface Props {
   steamId: string
   username: string
@@ -48,6 +55,7 @@ export function AccountCard({
   const [requestingUpdate, setRequestingUpdate] = useState(false)
   const { data: code } = use2FACode(steamId, hasAuthenticator)
   const rankLogoUrl = getRankLogoUrl(rank)
+  const effectiveNameplateUrl = nameplateUrl || DEFAULT_NAMEPLATE_URL
   const updateCooldownSeconds = lastMarvelUpdateRequestedAt
     ? Math.max(0, 30 * 60 - (Math.floor(Date.now() / 1000) - lastMarvelUpdateRequestedAt))
     : 0
@@ -83,7 +91,7 @@ export function AccountCard({
       toast.success('Marvel data synced')
       onUpdated()
     } catch (err) {
-      toast.error(String(err))
+      toast.error(marvelErrorMessage(err))
     } finally {
       setSyncing(false)
     }
@@ -97,7 +105,7 @@ export function AccountCard({
       toast.success('Marvel update queued')
       onUpdated()
     } catch (err) {
-      toast.error(String(err))
+      toast.error(marvelErrorMessage(err))
     } finally {
       setRequestingUpdate(false)
     }
@@ -107,11 +115,11 @@ export function AccountCard({
     <>
       <div
         className="relative overflow-hidden rounded-xl border border-slate-700/50 bg-slate-800/50 p-4"
-        style={nameplateUrl ? {
-          backgroundImage: `linear-gradient(90deg, rgba(15,23,42,.72), rgba(15,23,42,.36)), url("${nameplateUrl}")`,
+        style={{
+          backgroundImage: `linear-gradient(90deg, rgba(15,23,42,.72), rgba(15,23,42,.36)), url("${effectiveNameplateUrl}")`,
           backgroundPosition: 'center',
           backgroundSize: 'cover'
-        } : undefined}
+        }}
       >
         <div className="relative space-y-3">
           <div className="flex items-start justify-between gap-3">
