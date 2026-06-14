@@ -31,7 +31,9 @@ jobs:
         run: npm run typecheck
 
       - name: Build Windows installer
-        run: npm run build:win
+        run: |
+          npm run build
+          npx electron-builder --win --publish never
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
