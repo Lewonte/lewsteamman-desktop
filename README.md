@@ -85,6 +85,17 @@ npm run build:linux
 
 Installers are output to the `dist/` directory.
 
+### Release Build
+
+GitHub Actions builds the Windows installer when a version tag is pushed:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The workflow also supports manual runs from the Actions tab. Tagged runs create a GitHub Release and attach the Windows `.exe`.
+
 ---
 
 ## Project Structure
