@@ -5,11 +5,18 @@
 [![Electron](https://img.shields.io/badge/electron-33-47848F?logo=electron&logoColor=white)](https://electronjs.org)
 [![React](https://img.shields.io/badge/react-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/typescript-5-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
-[![License](https://img.shields.io/badge/license-private-red)](/)
+[![Status](https://img.shields.io/badge/status-WIP-yellow)](/)
+[![License](https://img.shields.io/badge/license-not%20selected-lightgrey)](/)
 
 **Desktop client for [LewSteamMan](https://github.com/Lewonte/LewSteamMan) — manage your Steam authenticators from the taskbar.**
 
 </div>
+
+---
+
+> **Work in progress:** LewSteamMan Desktop is an experimental companion app for a personal self-hosted server. It can display and copy sensitive account credentials, so use it only with a server you control.
+
+> **License:** No open-source license has been selected yet. The repository is public for visibility and development, but reuse/redistribution rights are not granted until a license is added.
 
 ---
 
