@@ -70,6 +70,18 @@ interface ApproveLoginResponse {
   success: boolean
 }
 
+interface ConfirmationResponse {
+  conf_id: string
+  nonce: string
+  conf_type: 'trade' | 'market' | 'other'
+  creator_id: string
+  description: string
+}
+
+interface ConfirmationActionResponse {
+  success: boolean
+}
+
 interface MarvelUpdateResponse {
   account: AccountResponse
   message: string
@@ -87,7 +99,19 @@ interface ElectronAPI {
   getCode(steamId: string): Promise<TwoFactorCodeResponse>
   getCredentials(steamId: string): Promise<CredentialsResponse>
   approveLogin(steamId: string, challengeUrl: string): Promise<ApproveLoginResponse>
+  getConfirmations(steamId: string): Promise<ConfirmationResponse[]>
+  approveConfirmation(
+    steamId: string,
+    confId: string,
+    nonce: string
+  ): Promise<ConfirmationActionResponse>
+  denyConfirmation(
+    steamId: string,
+    confId: string,
+    nonce: string
+  ): Promise<ConfirmationActionResponse>
   copyToClipboard(text: string): void
+  readClipboardImage(): string | null
 }
 
 declare global {

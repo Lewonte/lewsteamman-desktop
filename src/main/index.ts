@@ -7,10 +7,12 @@ let tray: Tray | null = null
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
-    width: 480,
-    height: 680,
-    resizable: false,
-    maximizable: false,
+    width: 720,
+    height: 840,
+    minWidth: 560,
+    minHeight: 700,
+    resizable: true,
+    maximizable: true,
     fullscreenable: false,
     title: 'LewSteamMan',
     backgroundColor: '#0f172a',

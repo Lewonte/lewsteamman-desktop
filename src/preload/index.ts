@@ -38,9 +38,19 @@ const api = {
   getCredentials: (steamId: string) => ipcRenderer.invoke('get-credentials', steamId),
   approveLogin: (steamId: string, challengeUrl: string) =>
     ipcRenderer.invoke('approve-login', steamId, challengeUrl),
+  getConfirmations: (steamId: string) => ipcRenderer.invoke('get-confirmations', steamId),
+  approveConfirmation: (steamId: string, confId: string, nonce: string) =>
+    ipcRenderer.invoke('approve-confirmation', steamId, confId, nonce),
+  denyConfirmation: (steamId: string, confId: string, nonce: string) =>
+    ipcRenderer.invoke('deny-confirmation', steamId, confId, nonce),
 
   // Clipboard
-  copyToClipboard: (text: string) => clipboard.writeText(text)
+  copyToClipboard: (text: string) => clipboard.writeText(text),
+  readClipboardImage: () => {
+    const image = clipboard.readImage()
+    if (image.isEmpty()) return null
+    return image.toDataURL()
+  }
 }
 
 contextBridge.exposeInMainWorld('api', api)

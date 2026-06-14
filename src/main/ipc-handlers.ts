@@ -10,14 +10,18 @@ function apiHeaders(): Record<string, string> {
 
 async function apiFetch(path: string, options: RequestInit = {}): Promise<unknown> {
   const baseUrl = getApiUrl().replace(/\/$/, '')
+  const method = options.method || 'GET'
+  console.info(`[apiFetch] ${method} ${path}`)
   const resp = await net.fetch(`${baseUrl}${path}`, {
     ...options,
     headers: { ...apiHeaders(), ...(options.headers as Record<string, string>) }
   })
   if (!resp.ok) {
     const body = await resp.text()
+    console.error(`[apiFetch] ${method} ${path} failed: ${resp.status}`, body)
     throw new Error(`API ${resp.status}: ${body}`)
   }
+  console.info(`[apiFetch] ${method} ${path} succeeded: ${resp.status}`)
   return resp.json()
 }
 
@@ -80,10 +84,47 @@ export function registerIpcHandlers(): void {
     apiFetch(`/accounts/${encodeURIComponent(steamId)}/credentials`)
   )
 
-  ipcMain.handle('approve-login', (_e, steamId: string, challengeUrl: string) =>
-    apiFetch(`/accounts/${encodeURIComponent(steamId)}/approve-login`, {
+  ipcMain.handle('approve-login', async (_e, steamId: string, challengeUrl: string) => {
+    console.info('[approve-login] request', {
+      steamId,
+      challengeUrlPreview: previewChallengeUrl(challengeUrl),
+      challengeUrlLength: challengeUrl.length
+    })
+    const result = await apiFetch(`/accounts/${encodeURIComponent(steamId)}/approve-login`, {
       method: 'POST',
       body: JSON.stringify({ challenge_url: challengeUrl })
     })
+    console.info('[approve-login] response', result)
+    return result
+  })
+
+  ipcMain.handle('get-confirmations', (_e, steamId: string) =>
+    apiFetch(`/accounts/${encodeURIComponent(steamId)}/confirmations`)
   )
+
+  ipcMain.handle('approve-confirmation', (_e, steamId: string, confId: string, nonce: string) =>
+    apiFetch(
+      `/accounts/${encodeURIComponent(steamId)}/confirmations/${encodeURIComponent(confId)}/approve`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ nonce })
+      }
+    )
+  )
+
+  ipcMain.handle('deny-confirmation', (_e, steamId: string, confId: string, nonce: string) =>
+    apiFetch(
+      `/accounts/${encodeURIComponent(steamId)}/confirmations/${encodeURIComponent(confId)}/deny`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ nonce })
+      }
+    )
+  )
+}
+
+function previewChallengeUrl(challengeUrl: string): string {
+  const trimmed = challengeUrl.trim()
+  if (trimmed.length <= 60) return trimmed
+  return `${trimmed.slice(0, 40)}...${trimmed.slice(-12)}`
 }

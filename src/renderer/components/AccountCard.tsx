@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Copy, Key, LockKeyhole, QrCode, RefreshCw, User } from 'lucide-react'
+import { Copy, Key, LockKeyhole, QrCode, RefreshCw, ShieldCheck, User } from 'lucide-react'
 import { getRankLogoUrl } from '../api/rankLogos'
 import { use2FACode } from '../hooks/use2FACode'
 import { CodeDisplay } from './CodeDisplay'
 import { CredentialsModal } from './CredentialsModal'
+import { ConfirmationsDialog } from './ConfirmationsDialog'
 import { EditAccountDialog } from './EditAccountDialog'
 import { QRApprovalDialog } from './QRApprovalDialog'
 import { toast } from 'sonner'
@@ -57,6 +58,7 @@ export function AccountCard({
   const [showCreds, setShowCreds] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
   const [showQR, setShowQR] = useState(false)
+  const [showConfirmations, setShowConfirmations] = useState(false)
   const [syncing, setSyncing] = useState(false)
   const [requestingUpdate, setRequestingUpdate] = useState(false)
   const { data: code } = use2FACode(steamId, hasAuthenticator)
@@ -176,13 +178,22 @@ export function AccountCard({
                 <Key size={16} className="text-slate-200" />
               </button>
               {hasAuthenticator && (
-                <button
-                  onClick={() => setShowQR(true)}
-                  className="rounded-lg bg-slate-950/30 p-1.5 transition-colors hover:bg-slate-700"
-                  title="Approve QR login"
-                >
-                  <QrCode size={16} className="text-slate-200" />
-                </button>
+                <>
+                  <button
+                    onClick={() => setShowConfirmations(true)}
+                    className="rounded-lg bg-slate-950/30 p-1.5 transition-colors hover:bg-slate-700"
+                    title="View approvals"
+                  >
+                    <ShieldCheck size={16} className="text-slate-200" />
+                  </button>
+                  <button
+                    onClick={() => setShowQR(true)}
+                    className="rounded-lg bg-slate-950/30 p-1.5 transition-colors hover:bg-slate-700"
+                    title="Approve QR login"
+                  >
+                    <QrCode size={16} className="text-slate-200" />
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -316,6 +327,12 @@ export function AccountCard({
       )}
       {hasAuthenticator && showQR && (
         <QRApprovalDialog steamId={steamId} onClose={() => setShowQR(false)} />
+      )}
+      {hasAuthenticator && showConfirmations && (
+        <ConfirmationsDialog
+          steamId={steamId}
+          onClose={() => setShowConfirmations(false)}
+        />
       )}
     </>
   )
