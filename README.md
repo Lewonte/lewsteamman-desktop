@@ -68,6 +68,17 @@ graph LR
 
 ### Install & Run
 
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/Lewonte/lewsteamman-desktop.git
+cd lewsteamman-desktop
+& 'C:\Program Files\nodejs\npm.cmd' install
+& 'C:\Program Files\nodejs\npm.cmd' run dev
+```
+
+macOS/Linux:
+
 ```bash
 git clone https://github.com/Lewonte/lewsteamman-desktop.git
 cd lewsteamman-desktop
@@ -78,6 +89,14 @@ npm run dev
 On first launch, you'll be prompted to enter your API URL and bearer token.
 
 ### Build Installer
+
+Windows PowerShell:
+
+```powershell
+& 'C:\Program Files\nodejs\npm.cmd' run build:win
+```
+
+macOS/Linux:
 
 ```bash
 # Windows
@@ -91,6 +110,22 @@ npm run build:linux
 ```
 
 Installers are output to the `dist/` directory.
+
+### Checks
+
+Windows PowerShell:
+
+```powershell
+& 'C:\Program Files\nodejs\npm.cmd' run typecheck
+& 'C:\Program Files\nodejs\npm.cmd' run build
+```
+
+macOS/Linux:
+
+```bash
+npm run typecheck
+npm run build
+```
 
 ### Release Build
 
@@ -158,6 +193,23 @@ src/
 - **Token storage**: The API bearer token is encrypted using Electron's `safeStorage` API, which delegates to the OS keychain (Windows Credential Manager, macOS Keychain, Linux Secret Service)
 - **Context isolation**: `contextIsolation: true`, `nodeIntegration: false` — the renderer has no direct access to Node.js or Electron APIs
 - **IPC proxy**: All HTTP requests to the API server are made from the main process; the renderer never sees the bearer token or constructs network requests
+
+See [SECURITY.md](SECURITY.md) before reporting security-sensitive issues.
+
+---
+
+## Screenshots
+
+Public-safe screenshot guidance lives in [docs/screenshots.md](docs/screenshots.md).
+Only commit screenshots or GIFs that use fake accounts, fake IDs, and no live
+tokens, passwords, or 2FA codes.
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks, and contribution
+guidelines.
 
 ---
 
